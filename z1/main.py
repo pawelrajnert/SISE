@@ -1,12 +1,13 @@
 import random
 
+
 def isMatrixGood(matrix):
     zeroPosition = ""
     uniqueElements = set()
     TAB_SIZE = len(matrix)
     if TAB_SIZE != 16:
         return False
-    for i in range (TAB_SIZE):
+    for i in range(TAB_SIZE):
         uniqueElements.add(matrix[i])
         if matrix[i] == 0:
             zeroPosition = i
@@ -14,35 +15,57 @@ def isMatrixGood(matrix):
         return False
     return True, zeroPosition
 
+
 def moveElement(move, matrix, zeroPos):
-    if move is "L" and zeroPos % 4 != 0:
+    if move == "L" and zeroPos % 4 != 0:
         matrix[zeroPos], matrix[zeroPos - 1] = matrix[zeroPos - 1], matrix[zeroPos]
         zeroPos -= 1
-    elif move is "R" and zeroPos % 4 != 3:
+    elif move == "R" and zeroPos % 4 != 3:
         matrix[zeroPos], matrix[zeroPos + 1] = matrix[zeroPos + 1], matrix[zeroPos]
         zeroPos += 1
-    elif move is "U" and zeroPos >= 4:
+    elif move == "U" and zeroPos >= 4:
         matrix[zeroPos], matrix[zeroPos - 4] = matrix[zeroPos - 4], matrix[zeroPos]
         zeroPos -= 4
-    elif move is "D" and zeroPos <= 11:
+    elif move == "D" and zeroPos <= 11:
         matrix[zeroPos], matrix[zeroPos + 4] = matrix[zeroPos + 4], matrix[zeroPos]
         zeroPos += 4
-    else: return False
-    return True, matrix, zeroPos
+    else:
+        return False, zeroPos
+    return True, zeroPos
+
 
 def printMatrix(matrix):
     for i in range(0, len(matrix), 4):
-        row = matrix[i:i+4]
+        row = matrix[i:i + 4]
         print(" ".join(f"{num:4}" for num in row))
 
-testMatrix = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-random.shuffle(testMatrix)
-printMatrix(testMatrix)
-_, zeroPos = isMatrixGood(testMatrix)
-print(zeroPos)
-print(moveElement("U", testMatrix, zeroPos))
+
+DIRECTIONS = ["L", "R", "U", "D"]
 
 
+def bruteForceTest():  # zostawię ci, żebyś też przejrzał działanie - potem to wywalimy
+    # TROCHĘ PRZEGLĄDAŁEM TYM SAM I WYDAJE MI SIĘ ŻE LOGIKA RUCHÓW DZIAŁA GIT, TYMCZASEM MY W CZWARTEK O 21:00 - (:
+    testMatrix = list(range(16))
+    random.shuffle(testMatrix)
+    _, zeroPos = isMatrixGood(testMatrix)
+    print("Pozycja zera: " + str(zeroPos) + ", stan początkowy: ")
+    printMatrix(testMatrix)
+    movesMade = list()
+    for _ in range(100000):       # zmień sobie na ludzką liczbę typu 5-10, bruteForce bo patrzę czy nie wywala programu XDDDDD
+        random.shuffle(testMatrix)      # zakomentuj/wywal by patrzeć na pojedynczy ruch na jednej planszy - to jest dla tzw bruteForce
+        move = random.choice(DIRECTIONS)
+        # print("Próbuję wykonać ruch: " + move + ", pozycja zera: " + str(zeroPos))        odkomentuj jak chcesz każdy ruch z osobna analizować
+        result, zeroPos = moveElement(move, testMatrix, zeroPos)
+        # do końca sobie odkomentuj - by analizować ruchy z osobna
+        # if result:
+            # printMatrix(testMatrix)
+            # movesMade.append(move)
+        #else: print("nope")
+    print("Wynik testu: ")
+    printMatrix(testMatrix)
+    # print("Wynikowa pozycja zera: " + str(zeroPos) + ", wykonane ruchy: ", end="")
+    # for move in movesMade:
+    #    print(move, end="")
 
 
-
+bruteForceTest()
