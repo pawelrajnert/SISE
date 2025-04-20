@@ -1,4 +1,6 @@
 import random
+from Node import Node
+from z1.bfs import bfs
 
 
 def isMatrixGood(matrix):
@@ -68,4 +70,16 @@ def bruteForceTest():  # zostawię ci, żebyś też przejrzał działanie - pote
     #    print(move, end="")
 
 
-bruteForceTest()
+#bruteForceTest()
+startState = Node([1, 2, 3, 4, 5, 0, 7, 8, 13, 6, 10, 12, 14, 9, 11, 15], None, None)
+result = bfs(startState)
+if result is False:
+    print(-1)
+else:
+    results = []
+    while result is not startState:
+        results.append(result.moveToPrev)
+        result = result.prevNode
+    print(len(results))
+    for result in reversed(results):
+        print(result, end="")
