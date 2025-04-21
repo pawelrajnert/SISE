@@ -1,36 +1,33 @@
 import time
-import numpy as np
-GOAL = np.array([[1,2,3,4],
-                 [5,6,7,8],
-                 [9,10,11,12],
-                 [13,14,15,0]])
-def dfs(startNode):
+from additionalMethods import prepareGoalBoard
+def dfs(startNode, strategy):
+    goalBoard = prepareGoalBoard(startNode)
     startTime = time.time()
     nodesVisited = 1            # Uwzględniamy możliwość odwiedzenia i przetworzenia stanu początkowego
     nodesProcessed = 1          # W przypadku, gdy jest on stanem docelowym i nie wchodzimy w pętlę
     maxDepth = 1
     currentNode = startNode
     foundGoal = False
-    if not (startNode.state == GOAL).all():
+    if not (startNode.state == goalBoard).all():
         openStateList = list()
         closedStateList = set()
         openStateList.append(startNode)
-        while time.time() - startTime < 60 and len(openStateList) > 0 and not foundGoal:
+        while time.time() - startTime < 120 and len(openStateList) > 0 and not foundGoal:
             currentNode = openStateList.pop()
             nodesProcessed += 1
-            if currentNode.nodeDepth < 30 and currentNode not in closedStateList:
+            if currentNode.nodeDepth < 20 and currentNode not in closedStateList:
                 closedStateList.add(currentNode)
-                currentNode.createChildren(["R","D","L","U"])
+                currentNode.createChildren(strategy)
                 for child in reversed(currentNode.children):
                     maxDepth = max(maxDepth, child.nodeDepth)
-                    if (child.state == GOAL).all():
+                    if (child.state == goalBoard).all():
                         currentNode = child
                         foundGoal = True
                         break
                     if child not in closedStateList:
                         nodesVisited += 1
                         openStateList.append(child)
-    if (currentNode.state == GOAL).all():
+    if (currentNode.state == goalBoard).all():
         return currentNode, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
     else:
         return None, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime

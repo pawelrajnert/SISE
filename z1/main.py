@@ -1,10 +1,11 @@
 import random
 
 import numpy as np
+import sys
 
 from Node import Node
-from z1.bfs import bfs
-from z1.dfs import dfs
+from bfs import bfs
+from dfs import dfs
 
 
 def isMatrixGood(matrix):
@@ -86,26 +87,116 @@ def findZeroAndVerify(array):
                 return row, col
     return None, None
 
-state = np.array([[5, 1, 7, 3],
-                  [9, 2, 6, 4],
-                  [13, 10, 11, 8],
-                  [0, 14, 15, 12]])
+def readBoardFromFile():
+    sourceFile = sys.argv[3]
+    openSourceFile = open(sourceFile, "r")
+    readText = openSourceFile.read()
+    readText = readText.split()
+    rows = int(readText[0])
+    cols = int(readText[1])
+    values = list(map(int, readText[2:]))
+    array = np.array(values).reshape(rows, cols)
+    return array
 
-startState = Node(state, None, None, 0, findZeroAndVerify(state))
-result = dfs(startState)
-if result[0] is None:
-    print(-1)
-else:
+def saveResultsToFiles(sf, df, r):
+    plikZapis = open(sf, "w")
+    movesMade = []
+    if r[0] is None:
+        print('-1', file=plikZapis)
+    else:
+        resultNode = r[0]
+        while resultNode.prevNode is not None:
+            movesMade.append(resultNode.moveToPrev)
+            resultNode = resultNode.prevNode
+        print(len(movesMade), file=plikZapis)
+        print(''.join(reversed(movesMade)), file=plikZapis)
+    plikZapis.close()
+    plikDane = open(df, "w")
+    if r[0] is None:
+        print('-1', file=plikDane)
+    else:
+        print(len(movesMade), file=plikDane)
+        print(r[1], file=plikDane)
+        print(r[2], file=plikDane)
+        print(r[3], file=plikDane)
+        print(f"{r[4]:.3f}", file=plikDane)
+
+# JAK COŚ: WSZYSTKO POWYŻEJ METODY findZeroAndVerify DO USUNIĘCIA POTEM
+
+if __name__ == '__main__':
+    if len(sys.argv) != 6:
+        print("BŁĘDNA ILOŚĆ PARAMETRÓW!")
+        print("Przykładowe wywołania programu:")
+        print("python main.py bfs RDUL 4x4_01_0001.txt 4x4_01_0001_bfs_rdul_sol.txt 4x4_01_0001_bfs_rdul_stats.txt")
+        print("python main.py dfs LUDR 4x4_01_0001.txt 4x4_01_0001_dfs_ludr_sol.txt 4x4_01_0001_dfs_ludr_stats.txt")
+        print("python main.py astr manh 4x4_01_0001.txt 4x4_01_0001_astr_manh_sol.txt 4x4_01_0001_astr_manh_stats.txt")
+        print("python main.py ALGORYTM STRATEGIA PLIK_WEJŚCIOWY PLIK_WYJŚCIOWY_ROZWIĄZANIE PLIK_WYJŚCIOWY_DODATKOWY")
+        print("ALGORYTM - bfs|dfs|astr")
+        print("STRATEGIA - permutacja RLDU (z dużych liter) dla bfs|dfs lub - manh|hamm dla astr (z małych liter)")
+        print("PLIK_WEJŚCIOWY - nazwa pliku z danymi do pobrania")
+        print("PLIK_WYJŚCIOWY_ROZWIĄZANIE - nazwa pliku, w którym zapisze się rozwiązanie")
+        print("PLIK_WYJŚCIOWY_DODATKOWY - nazwa pliku, w którym zapisze się dodatkowe informacje")
+        sys.exit(1)
+    algorithm = sys.argv[1]
+    if algorithm not in ["bfs", "dfs", "astr"]:
+        print("NIEOBSŁUGIWANA STRATEGIA! bfs|dfs|astr")
+        sys.exit(1)
+    strategy = sys.argv[2]
+    if algorithm == "bfs" or algorithm == "dfs":
+        strategy = list(sys.argv[2])
+        if set(strategy) != {"L", "R", "D", "U"}:
+            print("BŁĘDNA STRATEGIA! permutacja RLDU dla bfs|dfs")
+            sys.exit(1)
+    elif algorithm == "astr" and strategy not in("manh", "hamm"):
+        print("BŁĘDNA STRATEGIA! manh|hamm dla astr")
+        sys.exit(1)
+    startBoard = []
+    try:
+        startBoard = readBoardFromFile()
+    except:
+        raise ValueError("Wystąpił nieoczekiwany błąd z plikiem wejściowym!")
+
+    # TODO - ASTAR
+    # od teraz wywołanie tylko przez terminal, wpisujesz:
+    # python main.py bfs RDUL plikwejściowy x x
+    # i leci, za bfs i RDUL podstawiasz co chcesz
+    # pliki wejściowe są w formacie txt, i wyglądają tak:
+    # 4 4
+    # 1 2 3 4
+    # 5 6 7 8
+    # 9 10 11 12
+    # 13 14 15 0
+    # (1 linijka - rozmiar układanki, pozostałe - układ na planszy)
+
+    startState = Node(startBoard, None, None, 0, findZeroAndVerify(startBoard))
     results = []
-    resultNode = result[0]
-    while resultNode is not startState:
-        results.append(resultNode.moveToPrev)
-        resultNode = resultNode.prevNode
-    print(len(results))
-    for r in reversed(results):
-        print(r, end="")
-    print()
-    print("Liczba węzłów odwiedzonych: " + str(result[1]))
-    print("Liczba węzłów przetworzonych " + str(result[2]))
-    print("Maksymalna głębokość rekursji: " + str(result[3]))
-    print("Czas: " + str(result[4]))
+    if algorithm == "bfs":
+        results = bfs(startState, strategy)
+    elif algorithm == "dfs":
+        results = dfs(startState, strategy)
+    elif algorithm == "astr":
+        print("gwiazdka")
+    if algorithm != "astr":
+        try:
+            solutionFile = sys.argv[4]
+            dataFile = sys.argv[5]
+            saveResultsToFiles(solutionFile, dataFile, results)
+        except:
+            raise ValueError("Nastąpiły problemy przy zapisie danych do plików!")
+
+    # do usunięcia potem, na potrzeby weryfikacji zapisu na razie
+    if algorithm != "astr":
+        if results[0] is not None:
+            resultNode = results[0]
+            movesMade = []
+            while resultNode is not startState:
+                movesMade.append(resultNode.moveToPrev)
+                resultNode = resultNode.prevNode
+            print(len(movesMade))
+            for r in reversed(movesMade):
+                print(r, end="")
+            print()
+            print("Liczba węzłów odwiedzonych: " + str(results[1]))
+            print("Liczba węzłów przetworzonych " + str(results[2]))
+            print("Maksymalna głębokość rekursji: " + str(results[3]))
+            print("Czas: " + str(results[4]))
