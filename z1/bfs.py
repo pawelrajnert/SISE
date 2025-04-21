@@ -11,23 +11,23 @@ def bfs(startNode):
     currentNode = startNode
     if currentNode.state != GOAL:
         openStateList = collections.deque()
-        closedStateList = set()
+        visitedStateList = set()
         openStateList.append(startNode)
-        closedStateList.add(startNode)
+        visitedStateList.add(startNode)
         while time.time() - startTime < 60 and not foundGoal and len(openStateList) > 0:
             state = openStateList.popleft()
-            nodesVisited += 1
+            nodesProcessed += 1
             state.createChildren(["L","R","U","D"])
             for child in state.children:
-                nodesProcessed += 1
-                maxDepth = max(maxDepth, child.nodeDepth)
-                if child not in closedStateList:
+                if child not in visitedStateList:
+                    maxDepth = max(maxDepth, child.nodeDepth)
                     if child.state == GOAL:
                         currentNode = child
                         foundGoal = True
                         break
                     openStateList.append(child)
-                    closedStateList.add(child)
+                    visitedStateList.add(child)
+        nodesVisited += len(visitedStateList)
     if currentNode.state == GOAL:
         return currentNode, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
     else:
