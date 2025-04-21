@@ -92,7 +92,7 @@ state = np.array([[5, 1, 7, 3],
                   [0, 14, 15, 12]])
 
 startState = Node(state, None, None, 0, findZeroAndVerify(state))
-result = bfs(startState)
+result = dfs(startState)
 if result[0] is None:
     print(-1)
 else:

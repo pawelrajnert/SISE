@@ -1,5 +1,5 @@
 import time
-
+import numpy as np
 GOAL = np.array([[1,2,3,4],
                  [5,6,7,8],
                  [9,10,11,12],
@@ -11,26 +11,26 @@ def dfs(startNode):
     maxDepth = 1
     currentNode = startNode
     foundGoal = False
-    if startNode.state != GOAL:
+    if not (startNode.state == GOAL).all():
         openStateList = list()
         closedStateList = set()
         openStateList.append(startNode)
         while time.time() - startTime < 60 and len(openStateList) > 0 and not foundGoal:
             currentNode = openStateList.pop()
             nodesProcessed += 1
-            if currentNode.nodeDepth < 15 and currentNode not in closedStateList:
+            if currentNode.nodeDepth < 30 and currentNode not in closedStateList:
                 closedStateList.add(currentNode)
                 currentNode.createChildren(["R","D","L","U"])
                 for child in reversed(currentNode.children):
                     maxDepth = max(maxDepth, child.nodeDepth)
-                    if child.state == GOAL:
+                    if (child.state == GOAL).all():
                         currentNode = child
                         foundGoal = True
                         break
                     if child not in closedStateList:
                         nodesVisited += 1
                         openStateList.append(child)
-    if currentNode.state == GOAL:
+    if (currentNode.state == GOAL).all():
         return currentNode, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
     else:
         return None, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
