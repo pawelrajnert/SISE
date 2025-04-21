@@ -1,8 +1,6 @@
 import collections
 import time
 
-from z1.Node import Node
-
 GOAL = list(range(1,16)) + [0]
 def bfs(startNode):
     startTime = time.time()

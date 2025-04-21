@@ -1,5 +1,4 @@
 DIRECTIONS = ["L", "R", "U", "D"]
-import random
 
 class Node:
     def __init__(self, state, prevNode, moveToPrev, nodeDepth):
