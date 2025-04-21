@@ -40,7 +40,7 @@ class Node:
         for i in range(0, len(self.state), 4):
             row = self.state[i:i + 4]
             print(" ".join(f"{num:4}" for num in row))
-        print(self.zeroPos)
+        print(self.nodeDepth)
 
     def __hash__(self):
         return hash(tuple(self.state))
