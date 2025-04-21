@@ -1,4 +1,7 @@
 import random
+
+import numpy as np
+
 from Node import Node
 from z1.bfs import bfs
 from z1.dfs import dfs
@@ -70,10 +73,26 @@ def bruteForceTest():  # zostawię ci, żebyś też przejrzał działanie - pote
     # for move in movesMade:
     #    print(move, end="")
 
-
 #bruteForceTest()
-startState = Node([1, 2, 3, 4, 5, 0, 7, 8, 13, 6, 10, 12, 14, 9, 11, 15], None, None, 0)
-result = dfs(startState)
+
+def findZeroAndVerify(array):
+    rows = array.shape[0]
+    cols = array.shape[1]
+    if set(array.flatten()) != set(range(rows * cols)):
+        raise ValueError("Wprowadzony układ jest nieprawidłowy!")
+    for row in range(array.shape[0]):
+        for col in range(array.shape[1]):
+            if array[row, col] == 0:
+                return row, col
+    return None, None
+
+state = np.array([[5, 1, 7, 3],
+                  [9, 2, 6, 4],
+                  [13, 10, 11, 8],
+                  [0, 14, 15, 12]])
+
+startState = Node(state, None, None, 0, findZeroAndVerify(state))
+result = bfs(startState)
 if result[0] is None:
     print(-1)
 else:

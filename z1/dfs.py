@@ -1,7 +1,9 @@
 import time
 
-GOAL = list(range(1,16)) + [0]
-
+GOAL = np.array([[1,2,3,4],
+                 [5,6,7,8],
+                 [9,10,11,12],
+                 [13,14,15,0]])
 def dfs(startNode):
     startTime = time.time()
     nodesVisited = 1            # Uwzględniamy możliwość odwiedzenia i przetworzenia stanu początkowego
