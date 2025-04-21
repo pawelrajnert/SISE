@@ -2,10 +2,11 @@ DIRECTIONS = ["L", "R", "U", "D"]
 import random
 
 class Node:
-    def __init__(self, state, prevNode, moveToPrev):
+    def __init__(self, state, prevNode, moveToPrev, nodeDepth):
         self.state = state
         self.prevNode = prevNode
         self.moveToPrev = moveToPrev
+        self.nodeDepth = nodeDepth
         self.zeroPos = None
         self.children = []
         self.findZero()
@@ -32,7 +33,7 @@ class Node:
             elif element == "D" and self.zeroPos <= 11:
                 stateCopy[self.zeroPos], stateCopy[self.zeroPos + 4] = stateCopy[self.zeroPos + 4], stateCopy[self.zeroPos]
             if stateCopy != self.state:
-                childNode = Node(stateCopy, self, element)
+                childNode = Node(stateCopy, self, element, self.nodeDepth + 1)
                 self.children.append(childNode)
 
 

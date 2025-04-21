@@ -71,15 +71,21 @@ def bruteForceTest():  # zostawię ci, żebyś też przejrzał działanie - pote
 
 
 #bruteForceTest()
-startState = Node([1, 2, 3, 4, 5, 0, 7, 8, 13, 6, 10, 12, 14, 9, 11, 15], None, None)
+startState = Node([1, 2, 3, 4, 5, 0, 7, 8, 13, 6, 10, 12, 14, 9, 11, 15], None, None, 0)
 result = bfs(startState)
-if result is False:
+if result[0] is None:
     print(-1)
 else:
     results = []
-    while result is not startState:
-        results.append(result.moveToPrev)
-        result = result.prevNode
+    resultNode = result[0]
+    while resultNode is not startState:
+        results.append(resultNode.moveToPrev)
+        resultNode = resultNode.prevNode
     print(len(results))
-    for result in reversed(results):
-        print(result, end="")
+    for r in reversed(results):
+        print(r, end="")
+    print()
+    print("Liczba węzłów odwiedzonych: " + str(result[1]))
+    print("Liczba węzłów przetworzonych " + str(result[2]))
+    print("Maksymalna głębokość rekursji: " + str(result[3]))
+    print("Czas: " + str(result[4]))
