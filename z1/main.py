@@ -102,18 +102,6 @@ if __name__ == '__main__':
     except:
         raise ValueError("Wystąpił nieoczekiwany błąd z plikiem wejściowym!")
 
-    # TODO - ASTAR
-    # od teraz wywołanie tylko przez terminal, wpisujesz:
-    # python main.py bfs RDUL plikwejściowy x x
-    # i leci, za bfs i RDUL podstawiasz co chcesz
-    # pliki wejściowe są w formacie txt, i wyglądają tak:
-    # 4 4
-    # 1 2 3 4
-    # 5 6 7 8
-    # 9 10 11 12
-    # 13 14 15 0
-    # (1 linijka - rozmiar układanki, pozostałe - układ na planszy)
-
     startState = Node(startBoard, None, None, 0, findZeroAndVerify(startBoard))
     results = []
     if algorithm == "bfs":
@@ -133,23 +121,3 @@ if __name__ == '__main__':
 
     except:
         raise ValueError("Nastąpiły problemy przy zapisie danych do plików!")
-
-    # do usunięcia potem, na potrzeby weryfikacji zapisu na razie
-    if algorithm != "astr":
-
-        if results[0] is not None:
-            resultNode = results[0]
-            movesMade = []
-
-            while resultNode is not startState:
-                movesMade.append(resultNode.moveToPrev)
-                resultNode = resultNode.prevNode
-            print(len(movesMade))
-
-            for r in reversed(movesMade):
-                print(r, end="")
-            print()
-            print("Liczba węzłów odwiedzonych: " + str(results[1]))
-            print("Liczba węzłów przetworzonych " + str(results[2]))
-            print("Maksymalna głębokość rekursji: " + str(results[3]))
-            print("Czas: " + str(results[4]))
