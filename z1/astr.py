@@ -4,7 +4,7 @@ from queue import PriorityQueue
 from additionalMethods import *
 
 
-def astar(startNode, strategy, heuristic):
+def astar(startNode, strategy):
     goalBoard = prepareGoalBoard(startNode)
     startTime = time.time()
     nodesVisited = 1
@@ -36,11 +36,11 @@ def astar(startNode, strategy, heuristic):
 
                 for child in range(currentNode.children):
                     if child not in closedStateList:
-                        if heuristic == "hamming":
+                        if strategy == "hamm":
                             functionF = currentNode.nodeDepth + hamming(currentNode)
 
-                    if heuristic == "manhattan":
-                        functionF = currentNode.nodeDepth + manhattan(currentNode)
+                        if strategy == "manh":
+                            functionF = currentNode.nodeDepth + manhattan(currentNode)
 
                 openStateList.put((child, functionF))  # wedlug pseudokodu to tak (priorytet n i funkcja f)
 

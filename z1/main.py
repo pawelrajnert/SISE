@@ -185,11 +185,7 @@ if __name__ == '__main__':
         results = dfs(startState, strategy)
     elif algorithm == "astr":
         print("gwiazdka")
-        if (strategy == "manh"):
-            results = astar(startState, strategy, "manhattan")
-
-        if (strategy == "hamm"):
-            results = astar(startState, strategy, "hamming")
+        results = astar(startState, strategy)
 
     try:
         solutionFile = sys.argv[4]
