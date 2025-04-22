@@ -11,15 +11,18 @@ def bfs(startNode, strategy):
     currentDepth = 0
     foundGoal = False
     currentNode = startNode
+
     if not (currentNode.state == goalBoard).all():
         openStateList = collections.deque()
         visitedStateList = set()
         openStateList.append(startNode)
         visitedStateList.add(startNode)
+
         while time.time() - startTime < 120 and not foundGoal and len(openStateList) > 0:
             state = openStateList.popleft()
             nodesProcessed += 1
             state.createChildren(strategy)
+
             for child in state.children:
                 if child not in visitedStateList:
                     currentDepth = max(currentDepth, child.nodeDepth)
@@ -29,8 +32,9 @@ def bfs(startNode, strategy):
                     openStateList.append(child)
                     visitedStateList.add(child)
         nodesVisited = len(visitedStateList)
+
     if (currentNode.state == goalBoard).all():
         return currentNode, nodesVisited, nodesProcessed, currentDepth, time.time() - startTime
+
     else:
         return None, nodesVisited, nodesProcessed, currentDepth, time.time() - startTime
-

@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 
 from Node import Node
 from bfs import bfs
@@ -11,10 +12,12 @@ def findZeroAndVerify(array):
     cols = array.shape[1]
     if set(array.flatten()) != set(range(rows * cols)):
         raise ValueError("Wprowadzony układ jest nieprawidłowy!")
+
     for row in range(array.shape[0]):
         for col in range(array.shape[1]):
             if array[row, col] == 0:
                 return row, col
+
     return None, None
 
 
@@ -35,19 +38,26 @@ def saveResultsToFiles(sf, df, r):
     moves = []
     if r[0] is None:
         print('-1', file=plikZapis, end='')
+
     else:
         resultNode = r[0]
+
         while resultNode.prevNode is not None:
             moves.append(resultNode.moveToPrev)
             resultNode = resultNode.prevNode
+
         print(len(moves), file=plikZapis)
         print(''.join(reversed(moves)), file=plikZapis, end='')
+
     plikZapis.close()
     plikDane = open(df, "w")
+
     if r[0] is None:
         print('-1', file=plikDane)
+
     else:
         print(len(moves), file=plikDane)
+
     print(r[1], file=plikDane)
     print(r[2], file=plikDane)
     print(r[3], file=plikDane)
@@ -70,19 +80,23 @@ if __name__ == '__main__':
         print("PLIK_WYJŚCIOWY_DODATKOWY - nazwa pliku, w którym zapisze się dodatkowe informacje")
         sys.exit(1)
     algorithm = sys.argv[1]
+
     if algorithm not in ["bfs", "dfs", "astr"]:
         print("NIEOBSŁUGIWANA STRATEGIA! bfs|dfs|astr")
         sys.exit(1)
     strategy = sys.argv[2]
+
     if algorithm == "bfs" or algorithm == "dfs":
         strategy = list(sys.argv[2])
         if set(strategy) != {"L", "R", "D", "U"}:
             print("BŁĘDNA STRATEGIA! permutacja RLDU dla bfs|dfs")
             sys.exit(1)
+
     elif algorithm == "astr" and strategy not in ("manh", "hamm"):
         print("BŁĘDNA STRATEGIA! manh|hamm dla astr")
         sys.exit(1)
     startBoard = []
+
     try:
         startBoard = readBoardFromFile()
     except:
@@ -104,8 +118,10 @@ if __name__ == '__main__':
     results = []
     if algorithm == "bfs":
         results = bfs(startState, strategy)
+
     elif algorithm == "dfs":
         results = dfs(startState, strategy)
+
     elif algorithm == "astr":
         print("gwiazdka")
         results = astar(startState, strategy)
@@ -114,18 +130,22 @@ if __name__ == '__main__':
         solutionFile = sys.argv[4]
         dataFile = sys.argv[5]
         saveResultsToFiles(solutionFile, dataFile, results)
+
     except:
         raise ValueError("Nastąpiły problemy przy zapisie danych do plików!")
 
     # do usunięcia potem, na potrzeby weryfikacji zapisu na razie
     if algorithm != "astr":
+
         if results[0] is not None:
             resultNode = results[0]
             movesMade = []
+
             while resultNode is not startState:
                 movesMade.append(resultNode.moveToPrev)
                 resultNode = resultNode.prevNode
             print(len(movesMade))
+
             for r in reversed(movesMade):
                 print(r, end="")
             print()
