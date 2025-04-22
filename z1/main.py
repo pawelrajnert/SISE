@@ -8,6 +8,7 @@ from bfs import bfs
 from dfs import dfs
 from hamm import *
 from manh import *
+from astr import *
 
 
 def isMatrixGood(matrix):
@@ -184,13 +185,18 @@ if __name__ == '__main__':
         results = dfs(startState, strategy)
     elif algorithm == "astr":
         print("gwiazdka")
-    if algorithm != "astr":
-        try:
-            solutionFile = sys.argv[4]
-            dataFile = sys.argv[5]
-            saveResultsToFiles(solutionFile, dataFile, results)
-        except:
-            raise ValueError("Nastąpiły problemy przy zapisie danych do plików!")
+        if (strategy == "manh"):
+            results = astar(startState, strategy, "manhattan")
+
+        if (strategy == "hamm"):
+            results = astar(startState, strategy, "hamming")
+
+    try:
+        solutionFile = sys.argv[4]
+        dataFile = sys.argv[5]
+        saveResultsToFiles(solutionFile, dataFile, results)
+    except:
+        raise ValueError("Nastąpiły problemy przy zapisie danych do plików!")
 
     # do usunięcia potem, na potrzeby weryfikacji zapisu na razie
     if algorithm != "astr":

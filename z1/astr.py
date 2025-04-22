@@ -13,37 +13,34 @@ def astar(startNode, strategy, heuristic):
     foundGoal = False
     currentNode = startNode
 
-    if not (startNode.state == goalBoard).all():
-        closedStateList = set()
-        openStateList = PriorityQueue()
+    closedStateList = set()
+    openStateList = PriorityQueue()
 
-        openStateList.put((0, startNode))  # wrzucamy początkowy element z priorytetem 0
-        visitedStateList = set()
+    openStateList.put((0, startNode))  # wrzucamy początkowy element z priorytetem 0
+    visitedStateList = set()
 
-        while time.time() - startTime < 120 and not foundGoal and not openStateList.empty():
-            visitedStateList = openStateList.get()
-            nodesProcessed += 1
+    while time.time() - startTime < 120 and not foundGoal and not openStateList.empty():
+        visitedStateList = openStateList.get()
+        nodesProcessed += 1
 
-            if startNode.state == goalBoard:
-                foundGoal = True
-                return currentNode, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
+        if (currentNode.state == goalBoard).all():
+            foundGoal = True
+            return currentNode, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
 
-            currentNode.createChildren(strategy)
+        currentNode.createChildren(strategy)
 
+        for child in currentNode.children:
             if child not in visitedStateList:
-                if child not in closedStateList:
-                    openStateList.put(child)
-                    # nodesProcessed += 1?
+                openStateList.put(child)
+                # nodesVisited += 1?
 
-                for child in range(startNode.children):
+                for child in range(currentNode.children):
                     if child not in closedStateList:
                         if heuristic == "hamming":
-                            print("hamming")
-                            functionF = 1  # testowo narazie
+                            functionF = currentNode.nodeDepth + hamming(currentNode)
 
                     if heuristic == "manhattan":
-                        print("manhattan")
-                        functionF = 1  # tu tak samo
+                        functionF = currentNode.nodeDepth + manhattan(currentNode)
 
                 openStateList.put((child, functionF))  # wedlug pseudokodu to tak (priorytet n i funkcja f)
 
