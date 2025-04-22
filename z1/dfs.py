@@ -5,7 +5,7 @@ def dfs(startNode, strategy):
     startTime = time.time()
     nodesVisited = 1            # Uwzględniamy możliwość odwiedzenia i przetworzenia stanu początkowego
     nodesProcessed = 1          # W przypadku, gdy jest on stanem docelowym i nie wchodzimy w pętlę
-    maxDepth = 1
+    currentDepth = 0
     currentNode = startNode
     foundGoal = False
     if not (startNode.state == goalBoard).all():
@@ -15,19 +15,18 @@ def dfs(startNode, strategy):
         while time.time() - startTime < 120 and len(openStateList) > 0 and not foundGoal:
             currentNode = openStateList.pop()
             nodesProcessed += 1
-            if currentNode.nodeDepth < 20 and currentNode not in closedStateList:
+            if currentNode.nodeDepth < 25 and currentNode not in closedStateList:
                 closedStateList.add(currentNode)
                 currentNode.createChildren(strategy)
                 for child in reversed(currentNode.children):
-                    maxDepth = max(maxDepth, child.nodeDepth)
+                    currentDepth = max(currentDepth, child.nodeDepth)
                     if (child.state == goalBoard).all():
                         currentNode = child
                         foundGoal = True
-                        break
                     if child not in closedStateList:
                         nodesVisited += 1
                         openStateList.append(child)
     if (currentNode.state == goalBoard).all():
-        return currentNode, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
+        return currentNode, nodesVisited, nodesProcessed, currentDepth, time.time() - startTime
     else:
-        return None, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
+        return None, nodesVisited, nodesProcessed, currentDepth, time.time() - startTime

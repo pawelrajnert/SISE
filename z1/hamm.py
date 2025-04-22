@@ -6,12 +6,12 @@ def hamming(currentState):
     distance = 0
     goalBoard = prepareGoalBoard(currentState)
 
-    for i in range(0, currentState.RowSize):
-        for j in range(0, currentState.ColumnSize):
-            if (currentState[i][j] == 0): # zgodnie z informacją na zajęciach, ignorujemy bloczek 0 aby nie przeszacować wyniku
+    for i in range(0, currentState.rowSize):
+        for j in range(0, currentState.colSize):
+            if currentState.state[i][j] == 0: # zgodnie z informacją na zajęciach, ignorujemy bloczek 0 aby nie przeszacować wyniku
                 continue
 
-            if (currentState[i][j] != goalBoard[i][j]):
+            if currentState.state[i][j] != goalBoard[i][j]:
                 distance += 1
 
     return distance

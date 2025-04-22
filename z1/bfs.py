@@ -8,7 +8,7 @@ def bfs(startNode, strategy):
     startTime = time.time()
     nodesVisited = 1            # Uwzględniamy możliwość odwiedzenia i przetworzenia stanu początkowego
     nodesProcessed = 1          # W przypadku, gdy jest on stanem docelowym i nie wchodzimy w pętlę
-    maxDepth = 1
+    currentDepth = 0
     foundGoal = False
     currentNode = startNode
     if not (currentNode.state == goalBoard).all():
@@ -19,19 +19,19 @@ def bfs(startNode, strategy):
         while time.time() - startTime < 120 and not foundGoal and len(openStateList) > 0:
             state = openStateList.popleft()
             nodesProcessed += 1
+            print(state.state)
             state.createChildren(strategy)
             for child in state.children:
                 if child not in visitedStateList:
-                    maxDepth = max(maxDepth, child.nodeDepth)
+                    currentDepth = max(currentDepth, child.nodeDepth)
                     if (child.state == goalBoard).all():
                         currentNode = child
                         foundGoal = True
-                        break
                     openStateList.append(child)
                     visitedStateList.add(child)
-        nodesVisited += len(visitedStateList)
+        nodesVisited = len(visitedStateList)
     if (currentNode.state == goalBoard).all():
-        return currentNode, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
+        return currentNode, nodesVisited, nodesProcessed, currentDepth, time.time() - startTime
     else:
-        return None, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
+        return None, nodesVisited, nodesProcessed, currentDepth, time.time() - startTime
 

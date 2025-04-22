@@ -1,47 +1,40 @@
 import time
 from queue import PriorityQueue
 
-from additionalMethods import *
+from hamm import *
+from manh import *
 
 
 def astar(startNode, strategy):
     goalBoard = prepareGoalBoard(startNode)
     startTime = time.time()
     nodesVisited = 1
-    nodesProcessed = 1
-    maxDepth = 1
-    foundGoal = False
-    currentNode = startNode
+    nodesProcessed = 0
+    currentDepth = 0
 
-    closedStateList = set()
     openStateList = PriorityQueue()
+    closedStateList = set()
+    openStateList.put((0, nodesVisited, startNode))  # wrzucamy początkowy element z priorytetem 0
 
-    openStateList.put((0, startNode))  # wrzucamy początkowy element z priorytetem 0
-    visitedStateList = set()
-
-    while time.time() - startTime < 120 and not foundGoal and not openStateList.empty():
-        visitedStateList = openStateList.get()
+    while time.time() - startTime < 120 and not openStateList.empty():
+        currentNode = openStateList.get()
         nodesProcessed += 1
 
-        if (currentNode.state == goalBoard).all():
-            foundGoal = True
-            return currentNode, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
+        if (currentNode[2].state == goalBoard).all():
+            return currentNode[2], nodesVisited, nodesProcessed, currentDepth, time.time() - startTime
+        if currentNode[2] not in closedStateList:
+            closedStateList.add(currentNode[2])
+            currentNode[2].createChildren(["R","L","U","D"])
+            for child in currentNode[2].children:
+                currentDepth = max(currentDepth, child.nodeDepth)
+                if child not in closedStateList:
+                    nodesVisited += 1
+                    functionF = 0
+                    if strategy == "hamm":
+                        functionF = child.nodeDepth + hamming(child)
 
-        currentNode.createChildren(strategy)
+                    if strategy == "manh":
+                        functionF = child.nodeDepth + manhattan(child)
+                    openStateList.put((functionF, nodesVisited, child))  # wedlug pseudokodu to tak (priorytet n i funkcja f)
 
-        for child in currentNode.children:
-            if child not in visitedStateList:
-                openStateList.put(child)
-                # nodesVisited += 1?
-
-                for child in range(currentNode.children):
-                    if child not in closedStateList:
-                        if strategy == "hamm":
-                            functionF = currentNode.nodeDepth + hamming(currentNode)
-
-                        if strategy == "manh":
-                            functionF = currentNode.nodeDepth + manhattan(currentNode)
-
-                openStateList.put((child, functionF))  # wedlug pseudokodu to tak (priorytet n i funkcja f)
-
-    return None, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
+    return None, nodesVisited, nodesProcessed, currentDepth, time.time() - startTime
