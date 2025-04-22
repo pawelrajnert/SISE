@@ -6,6 +6,8 @@ import sys
 from Node import Node
 from bfs import bfs
 from dfs import dfs
+from hamm import *
+from manh import *
 
 
 def isMatrixGood(matrix):
@@ -58,23 +60,26 @@ def bruteForceTest():  # zostawię ci, żebyś też przejrzał działanie - pote
     print("Pozycja zera: " + str(zeroPos) + ", stan początkowy: ")
     printMatrix(testMatrix)
     movesMade = list()
-    for _ in range(100000):       # zmień sobie na ludzką liczbę typu 5-10, bruteForce bo patrzę czy nie wywala programu XDDDDD
-        random.shuffle(testMatrix)      # zakomentuj/wywal by patrzeć na pojedynczy ruch na jednej planszy - to jest dla tzw bruteForce
+    for _ in range(
+            100000):  # zmień sobie na ludzką liczbę typu 5-10, bruteForce bo patrzę czy nie wywala programu XDDDDD
+        random.shuffle(
+            testMatrix)  # zakomentuj/wywal by patrzeć na pojedynczy ruch na jednej planszy - to jest dla tzw bruteForce
         move = random.choice(DIRECTIONS)
         # print("Próbuję wykonać ruch: " + move + ", pozycja zera: " + str(zeroPos))        odkomentuj jak chcesz każdy ruch z osobna analizować
         result, zeroPos = moveElement(move, testMatrix, zeroPos)
         # do końca sobie odkomentuj - by analizować ruchy z osobna
         # if result:
-            # printMatrix(testMatrix)
-            # movesMade.append(move)
-        #else: print("nope")
+        # printMatrix(testMatrix)
+        # movesMade.append(move)
+        # else: print("nope")
     print("Wynik testu: ")
     printMatrix(testMatrix)
     # print("Wynikowa pozycja zera: " + str(zeroPos) + ", wykonane ruchy: ", end="")
     # for move in movesMade:
     #    print(move, end="")
 
-#bruteForceTest()
+
+# bruteForceTest()
 
 def findZeroAndVerify(array):
     rows = array.shape[0]
@@ -87,6 +92,7 @@ def findZeroAndVerify(array):
                 return row, col
     return None, None
 
+
 def readBoardFromFile():
     sourceFile = sys.argv[3]
     openSourceFile = open(sourceFile, "r")
@@ -97,6 +103,7 @@ def readBoardFromFile():
     values = list(map(int, readText[2:]))
     array = np.array(values).reshape(rows, cols)
     return array
+
 
 def saveResultsToFiles(sf, df, r):
     plikZapis = open(sf, "w")
@@ -120,6 +127,7 @@ def saveResultsToFiles(sf, df, r):
         print(r[2], file=plikDane)
         print(r[3], file=plikDane)
         print(f"{r[4]:.3f}", file=plikDane)
+
 
 # JAK COŚ: WSZYSTKO POWYŻEJ METODY findZeroAndVerify DO USUNIĘCIA POTEM
 
@@ -147,7 +155,7 @@ if __name__ == '__main__':
         if set(strategy) != {"L", "R", "D", "U"}:
             print("BŁĘDNA STRATEGIA! permutacja RLDU dla bfs|dfs")
             sys.exit(1)
-    elif algorithm == "astr" and strategy not in("manh", "hamm"):
+    elif algorithm == "astr" and strategy not in ("manh", "hamm"):
         print("BŁĘDNA STRATEGIA! manh|hamm dla astr")
         sys.exit(1)
     startBoard = []

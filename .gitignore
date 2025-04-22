@@ -175,3 +175,5 @@ cython_debug/
 
 # pliki tekstowe z układankami i rozwiązaniami
 *.txt
+
+.DS_Store
