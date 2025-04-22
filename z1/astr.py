@@ -44,4 +44,4 @@ def astar(startNode, strategy):
 
                 openStateList.put((child, functionF))  # wedlug pseudokodu to tak (priorytet n i funkcja f)
 
-    return False, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
+    return None, nodesVisited, nodesProcessed, maxDepth, time.time() - startTime
