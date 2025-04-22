@@ -19,7 +19,6 @@ def bfs(startNode, strategy):
         while time.time() - startTime < 120 and not foundGoal and len(openStateList) > 0:
             state = openStateList.popleft()
             nodesProcessed += 1
-            print(state.state)
             state.createChildren(strategy)
             for child in state.children:
                 if child not in visitedStateList:

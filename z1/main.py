@@ -34,14 +34,14 @@ def saveResultsToFiles(sf, df, r):
     plikZapis = open(sf, "w")
     moves = []
     if r[0] is None:
-        print('-1', file=plikZapis)
+        print('-1', file=plikZapis, end='')
     else:
         resultNode = r[0]
         while resultNode.prevNode is not None:
             moves.append(resultNode.moveToPrev)
             resultNode = resultNode.prevNode
         print(len(moves), file=plikZapis)
-        print(''.join(reversed(moves)), file=plikZapis)
+        print(''.join(reversed(moves)), file=plikZapis, end='')
     plikZapis.close()
     plikDane = open(df, "w")
     if r[0] is None:
@@ -51,7 +51,7 @@ def saveResultsToFiles(sf, df, r):
     print(r[1], file=plikDane)
     print(r[2], file=plikDane)
     print(r[3], file=plikDane)
-    print(f"{r[4]:.3f}", file=plikDane)
+    print(f"{r[4]:.3f}", file=plikDane, end='')
     plikDane.close()
 
 
