@@ -82,8 +82,6 @@ def plot1():
     plt.bar(x, dfsPrint, width=0.3, label="DFS", color="C1")
     plt.bar(x + 0.3, astrPrint, width=0.3, label="A*", color="C2")
 
-    # plt.yscale("log")
-
     plt.xticks(x, depths)
     plt.title("Ogółem")
     plt.xlabel("Głębokość")
@@ -184,8 +182,8 @@ def plot2():
 
     plt.xticks(x, depths)
     plt.yscale("log")
-    plt.yticks([1,10,100,1000,10000,100000],[1,10,100,1000,10000,100000])
-    plt.ylim(1,300000)
+    plt.yticks([1, 10, 100, 1000, 10000, 100000], [1, 10, 100, 1000, 10000, 100000])
+    plt.ylim(1, 300000)
     plt.title("Ogółem")
     plt.xlabel("Głębokość")
     plt.ylabel("Liczba stanów odwiedzonych")
@@ -221,13 +219,14 @@ def plot2():
     plt.xticks(x, depths)
     plt.yscale("log")
     plt.yticks([1, 10, 100, 1000, 10000, 100000], [1, 10, 100, 1000, 10000, 100000])
-    plt.ylim(1,300000)
+    plt.ylim(1, 300000)
     plt.ylabel("Liczba stanów odwiedzonych")
     plt.xlabel("Głębokość")
     plt.title("DFS")
     plt.legend()
     plt.tight_layout()
     plt.show()
+
 
 def plot3():
     depths = list(range(1, 8))
@@ -290,8 +289,8 @@ def plot3():
 
     plt.xticks(x, depths)
     plt.yscale("log")
-    plt.yticks([1,10,100,1000,10000,100000],[1,10,100,1000,10000,100000])
-    plt.ylim(1,300000)
+    plt.yticks([1, 10, 100, 1000, 10000, 100000], [1, 10, 100, 1000, 10000, 100000])
+    plt.ylim(1, 300000)
     plt.title("Ogółem")
     plt.xlabel("Głębokość")
     plt.ylabel("Liczba stanów przetworzonych")
@@ -327,13 +326,14 @@ def plot3():
     plt.xticks(x, depths)
     plt.yscale("log")
     plt.yticks([1, 10, 100, 1000, 10000, 100000], [1, 10, 100, 1000, 10000, 100000])
-    plt.ylim(1,300000)
+    plt.ylim(1, 300000)
     plt.ylabel("Liczba stanów przetworzonych")
     plt.xlabel("Głębokość")
     plt.title("DFS")
     plt.legend()
     plt.tight_layout()
     plt.show()
+
 
 def plot4():
     depths = list(range(1, 8))
@@ -432,6 +432,7 @@ def plot4():
     plt.tight_layout()
     plt.show()
 
+
 def plot5():
     depths = list(range(1, 8))
 
@@ -493,8 +494,8 @@ def plot5():
 
     plt.xticks(x, depths)
     plt.yscale("log")
-    plt.yticks([0.0001,0.001,0.01,0.1,1,10],[0.0001,0.001,0.01,0.1,1,10])
-    plt.ylim(0.0001,10)
+    plt.yticks([0.0001, 0.001, 0.01, 0.1, 1, 10], [0.0001, 0.001, 0.01, 0.1, 1, 10])
+    plt.ylim(0.0001, 10)
     plt.title("Ogółem")
     plt.xlabel("Głębokość")
     plt.ylabel("Średni czas trwania procesu obliczeniowego")
@@ -538,6 +539,7 @@ def plot5():
     plt.legend()
     plt.tight_layout()
     plt.show()
+
 
 plot1()
 plot2()

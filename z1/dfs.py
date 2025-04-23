@@ -1,10 +1,12 @@
 import time
 from additionalMethods import prepareGoalBoard
+
+
 def dfs(startNode, strategy):
     goalBoard = prepareGoalBoard(startNode)
     startTime = time.time()
-    nodesVisited = 1            # Uwzględniamy możliwość odwiedzenia i przetworzenia stanu początkowego
-    nodesProcessed = 1          # W przypadku, gdy jest on stanem docelowym i nie wchodzimy w pętlę
+    nodesVisited = 1  # Uwzględniamy możliwość odwiedzenia i przetworzenia stanu początkowego
+    nodesProcessed = 1  # W przypadku, gdy jest on stanem docelowym i nie wchodzimy w pętlę
     currentDepth = 0
     currentNode = startNode
     foundGoal = False
@@ -28,6 +30,7 @@ def dfs(startNode, strategy):
                     if (child.state == goalBoard).all():
                         currentNode = child
                         foundGoal = True
+
                     if child not in closedStateList:
                         nodesVisited += 1
                         openStateList.append(child)

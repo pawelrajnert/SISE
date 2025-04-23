@@ -2,6 +2,7 @@ import time
 from queue import PriorityQueue
 from additionalMethods import *
 
+
 def astar(startNode, strategy):
     goalBoard = prepareGoalBoard(startNode)
     startTime = time.time()
@@ -19,20 +20,23 @@ def astar(startNode, strategy):
 
         if (currentNode[2].state == goalBoard).all():
             return currentNode[2], nodesVisited, nodesProcessed, currentDepth, time.time() - startTime
+
         if currentNode[2] not in closedStateList:
             closedStateList.add(currentNode[2])
             currentNode[2].createChildren(["R", "L", "U", "D"])
+
             for child in currentNode[2].children:
                 currentDepth = max(currentDepth, child.nodeDepth)
+
                 if child not in closedStateList:
                     nodesVisited += 1
                     functionF = 0
+
                     if strategy == "hamm":
                         functionF = child.nodeDepth + hamming(child)
 
                     if strategy == "manh":
                         functionF = child.nodeDepth + manhattan(child)
-                    openStateList.put(
-                        (functionF, nodesVisited, child))  # wedlug pseudokodu to tak (priorytet n i funkcja f)
+                    openStateList.put((functionF, nodesVisited, child))
 
     return None, nodesVisited, nodesProcessed, currentDepth, time.time() - startTime
