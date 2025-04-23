@@ -20,12 +20,16 @@ astrData = data[data[:, 2] == "astr"]
 algorithms = ["BFS", "DFS", "A*"]
 dfsCorrectSolved = dfsData[dfsData[:, 4] != "-1"]
 
+
 def plot1():
     depths = list(range(1, 8))
 
     bfsPrint = []
     dfsPrint = []
     astrPrint = []
+
+    astrManhattan = []
+    astrHamming = []
 
     for depth in depths:
         bfsRows = bfsData[bfsData[:, 0] == str(depth)]
@@ -34,13 +38,21 @@ def plot1():
         #dfsRows = dfsData[dfsData[:, 0] == str(depth)]
         astrRows = astrData[astrData[:, 0] == str(depth)]
 
+
         bfsAvg = np.mean(bfsRows[:,4].astype(float))
         dfsAvg = np.mean(dfsRows[:, 4].astype(float))
         astrAvg = np.mean(astrRows[:,4].astype(float))
-        print(dfsRows.shape)
         bfsPrint.append(bfsAvg)
         dfsPrint.append(dfsAvg)
         astrPrint.append(astrAvg)
+
+        # wykres do a*
+        astrHamm = astrRows[astrRows[:, 3] == "hamm"]
+        astrManh = astrRows[astrRows[:, 3] == "manh"]
+        astrHammAvg = np.mean(astrHamm[:,4].astype(float))
+        astrManhAvg = np.mean(astrManh[:,4].astype(float))
+        astrHamming.append(astrHammAvg)
+        astrManhattan.append(astrManhAvg)
 
     x = np.arange(len(depths))
 
@@ -54,19 +66,19 @@ def plot1():
     plt.ylabel("Średnia arytmetyczna długości rozwiązania")
     plt.legend()
     plt.tight_layout()
-    print(astrPrint)
-    print(bfsPrint)
-    print(dfsPrint)
     plt.show()
-
-def plot2ASTR():
-    depths = list(range(1, 8))
-
+    plt.bar(x - 0.15, astrHamming, width=0.3, label="Hamming", color="C0")
+    plt.bar(x + 0.15, astrManhattan, width=0.3, label="Manhattan", color="C1")
+    plt.xticks(x, depths)
+    plt.xlabel("Głębokość")
+    plt.ylabel("Średnia arytmetyczna długości rozwiązania")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
 
 
 
 plot1()
-plot2ASTR()
 #preparePercentagePlot()
 #prepareDfsAccuracyRegardingMoveOrder()
 #prepareDfsAccuracyRegardingBoardDepth()
