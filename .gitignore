@@ -179,3 +179,5 @@ cython_debug/
 *.ps1
 *.sh
 .DS_Store
+*.jar
+*.docx

@@ -18,7 +18,7 @@ def dfs(startNode, strategy):
             currentNode = openStateList.pop()
             nodesProcessed += 1
 
-            if currentNode.nodeDepth < 25 and currentNode not in closedStateList:
+            if currentNode.nodeDepth < 21 and currentNode not in closedStateList:
                 closedStateList.add(currentNode)
                 currentNode.createChildren(strategy)
 
