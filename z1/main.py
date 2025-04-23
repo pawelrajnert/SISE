@@ -1,5 +1,4 @@
 import sys
-import numpy as np
 
 from Node import Node
 from bfs import bfs
@@ -111,7 +110,6 @@ if __name__ == '__main__':
         results = dfs(startState, strategy)
 
     elif algorithm == "astr":
-        print("gwiazdka")
         results = astar(startState, strategy)
 
     try:
