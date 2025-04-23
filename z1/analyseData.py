@@ -518,9 +518,7 @@ def plot5():
     for i in range(8):
         plt.bar(x - 0.35 + i * 0.1, bfsPermutations[i], width=0.1, label=permutations[i].upper(), color=f"C{i}")
     plt.xticks(x, depths)
-    plt.yscale("log")
-    plt.yticks([0.0001, 0.001, 0.01], [0.0001, 0.001, 0.01])
-    plt.ylim(0.0001, 0.01)
+
     plt.legend()
     plt.ylabel("Średni czas trwania procesu obliczeniowego")
     plt.xlabel("Głębokość")
