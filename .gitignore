@@ -178,4 +178,5 @@ cython_debug/
 # scripts
 *.ps1
 *.sh
+*.jar
 .DS_Store
