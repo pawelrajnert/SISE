@@ -14,69 +14,59 @@ def readFile():
 # Operujemy na zmiennych globalnych w przypadku tworzenia wykresów
 data = readFile()
 bfsData = data[data[:, 2] == "bfs"]
-bfsErrorData = bfsData[bfsData[:, 4] == "-1"]
 dfsData = data[data[:, 2] == "dfs"]
 dfsErrorData = dfsData[dfsData[:, 4] == "-1"]
 astrData = data[data[:, 2] == "astr"]
-astrErrorData = astrData[astrData[:, 4] == "-1"]
 algorithms = ["BFS", "DFS", "A*"]
+dfsCorrectSolved = dfsData[dfsData[:, 4] != "-1"]
 
+def plot1():
+    depths = list(range(1, 8))
 
-def preparePercentagePlot():
-    correctBfsSolutionsPercentage = round(100 * (bfsData.shape[0] - bfsErrorData.shape[0]) / bfsData.shape[0], 2)
-    correctDfsSolutionsPercentage = round(100 * (dfsData.shape[0] - dfsErrorData.shape[0]) / dfsData.shape[0], 2)
-    correctAstrSolutionsPercentage = round(100 * (astrData.shape[0] - astrErrorData.shape[0]) / astrData.shape[0], 2)
+    bfsPrint = []
+    dfsPrint = []
+    astrPrint = []
 
-    correctSolutions = [correctBfsSolutionsPercentage, correctDfsSolutionsPercentage, correctAstrSolutionsPercentage]
-    plt.figure(figsize=(4, 4))
-    plt.bar(algorithms, correctSolutions)
-    plt.xlabel("Algorytm")
-    plt.ylabel("%")
-    plt.title("% poprawnych rozwiązań")
-    plt.ylim(70, 102)
-    plt.tight_layout()
-    plt.show()
+    for depth in depths:
+        bfsRows = bfsData[bfsData[:, 0] == str(depth)]
+        dfsRows = dfsCorrectSolved[dfsCorrectSolved[:, 0] == str(depth)]
+        # tu zmienic po 1 zeby bylo na dfsData
+        #dfsRows = dfsData[dfsData[:, 0] == str(depth)]
+        astrRows = astrData[astrData[:, 0] == str(depth)]
 
+        bfsAvg = np.mean(bfsRows[:,4].astype(float))
+        dfsAvg = np.mean(dfsRows[:, 4].astype(float))
+        astrAvg = np.mean(astrRows[:,4].astype(float))
+        print(dfsRows.shape)
+        bfsPrint.append(bfsAvg)
+        dfsPrint.append(dfsAvg)
+        astrPrint.append(astrAvg)
 
-def prepareDfsAccuracyRegardingMoveOrder():
-    permutations = ["drlu", "drul", "ludr", "lurd", "rdlu", "rdul", "uldr", "ulrd"]
-    dfsErrors = []
-    for i, permutation in enumerate(permutations):
-        count = dfsErrorData[dfsErrorData[:,3] == permutation].shape[0]
-        percentage = round(100 * count / 413, 2)
-        dfsErrors.append(100 - percentage)
+    x = np.arange(len(depths))
 
-    plt.figure(figsize=(4, 4))
-    plt.bar(permutations, dfsErrors)
-    plt.xlabel("Permutacja")
-    plt.ylabel("%")
-    plt.title("Algorytm dfs - % poprawnych rozwiązań")
-    plt.ylim(75, 85)
-    plt.tight_layout()
-    plt.show()
+    plt.bar(x - 0.3, bfsPrint, width=0.3, label="BFS", color="C0")
+    plt.bar(x, dfsPrint, width=0.3, label="DFS", color="C1")
+    plt.bar(x + 0.3, astrPrint, width=0.3, label="A*", color="C2")
 
-def prepareDfsAccuracyRegardingBoardDepth():
-    # NIE DZIAŁA NA RAZIE POTEM POPRAWIĘ
-    depths = list(range(1,8))
-    dfsErrors = []
-    for i, depth in enumerate(depths):
-        xd = dfsErrorData[dfsErrorData[:, 0] == str(depth)]
-        print(xd.shape)
-        count = dfsErrorData[dfsErrorData[:, 0] == str(depth)].shape[0]
-        print(count)
-        percentage = round(100 * count / 413, 2)
-        dfsErrors.append(100 - percentage)
-
-    plt.figure(figsize=(4, 4))
-    plt.bar(depths, dfsErrors)
-    plt.xticks(depths)
+    #plt.yscale("log")
+    plt.xticks(x, depths)
     plt.xlabel("Głębokość")
-    plt.ylabel("%")
-    plt.title("Algorytm dfs - % poprawnych rozwiązań")
+    plt.ylabel("Średnia arytmetyczna długości rozwiązania")
+    plt.legend()
     plt.tight_layout()
+    print(astrPrint)
+    print(bfsPrint)
+    print(dfsPrint)
     plt.show()
 
+def plot2ASTR():
+    depths = list(range(1, 8))
 
-preparePercentagePlot()
-prepareDfsAccuracyRegardingMoveOrder()
-prepareDfsAccuracyRegardingBoardDepth()
+
+
+
+plot1()
+plot2ASTR()
+#preparePercentagePlot()
+#prepareDfsAccuracyRegardingMoveOrder()
+#prepareDfsAccuracyRegardingBoardDepth()
