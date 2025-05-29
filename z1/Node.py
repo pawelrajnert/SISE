@@ -39,10 +39,6 @@ class Node:
             childNode = Node(stateCopy, self, element, self.nodeDepth + 1, newZeroPos)
             self.children.append(childNode)
 
-
-    def printState(self):
-        print(str(self.state) + ", głębokość: " + str(self.nodeDepth) + ", pozycja zera: " + str(self.zeroPos) + ", ruch: " + str(self.moveToPrev))
-
     def __hash__(self):
         return hash(tuple(self.state.flatten()))
 

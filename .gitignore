@@ -181,3 +181,10 @@ cython_debug/
 .DS_Store
 *.jar
 *.docx
+*.pdf
+*.zip
+
+# dane do z2
+*.csv
+*.gif
+*.png
