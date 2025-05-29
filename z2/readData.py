@@ -1,7 +1,11 @@
 import os
-
 import pandas as pd
 import numpy as np
+
+
+# Zgodnie z 2 akapitem opisu części badawczej, tworzymy dwa zbiory, zawierające 4 kolumny:
+# - zbiór do uczenia sieci (dane z plików z katalogów "stat")
+# - zbiór do testowania sieci (dane z plików z katalogów "dyn")
 def readData():
     dynData = []
     statData = []
