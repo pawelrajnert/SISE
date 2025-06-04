@@ -1,5 +1,7 @@
 {
   "hiddenSize": 30,
   "activation": "sigmoid",
-  "scalerType": "maxabs"
+  "scalerType": "maxabs",
+  "lr": 0.001,
+  "max_epochs": 100
 }

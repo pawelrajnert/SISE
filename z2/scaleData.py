@@ -11,7 +11,6 @@ def scaleData(statData, dynData, scalerToUse):
         scaler = MaxAbsScaler()
     else:
         raise ValueError("Zastosowano nieobsługiwany typ skalowania danych")
-    print(scaler)
     scaler.fit(statData)  # skalujemy na podstawie danych treningowych
     statScaled = scaler.transform(statData)
     dynScaled = scaler.transform(dynData)  # tę samą skalę stosujemy też dla danych testowych
