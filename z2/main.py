@@ -11,6 +11,7 @@ try:
     hiddenSize = config['hiddenSize']
     lr = config['lr']
     max_epochs = config['max_epochs']
+    max_errors = config['max_errors']
 except FileNotFoundError:
     raise ValueError("Nie można załadować pliku z configiem; upewnij się, że plik config.json znajduje się w katalogu.")
 except KeyError:
@@ -21,5 +22,5 @@ statData, dynData = readData()
 scaledStatData, scaledDynData, usedScaler = scaleData(statData, dynData, scalerType)
 
 net = NeuralNetwork(hiddenSize, activation)
-trainingParams = {'lr': lr, 'max_epochs': max_epochs}
+trainingParams = {'lr': lr, 'max_epochs': max_epochs, 'max_errors': max_errors}
 trainNetwork(net, scaledStatData, scaledDynData, trainingParams)

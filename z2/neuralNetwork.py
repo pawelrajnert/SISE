@@ -1,6 +1,7 @@
 import torch
 from scaleData import numpyToTorch
 
+
 class NeuralNetwork(torch.nn.Module):
 
     def __init__(self, hiddenSize, activation):
@@ -23,6 +24,7 @@ class NeuralNetwork(torch.nn.Module):
         x = self.hiddenToOutput(x)
         return x
 
+
 def trainNetwork(net, statData, dynData, trainingParams):
     # Podział danych na dane treningowe i testowe oraz dane wejściowe i wyjściowe
     trainInputData = numpyToTorch(statData, "01")
@@ -33,6 +35,9 @@ def trainNetwork(net, statData, dynData, trainingParams):
     lossFn = torch.nn.MSELoss()
     optimizer = torch.optim.Adam(net.parameters(), lr=trainingParams["lr"])
     maxEpochs = trainingParams["max_epochs"]
+    maxErrors = trainingParams["max_errors"]
+    errorCounter = 0
+    bestError = float("inf")
 
     for epoch in range(maxEpochs):
         # trenowanie sieci na zbiorze treningowym
@@ -52,3 +57,13 @@ def trainNetwork(net, statData, dynData, trainingParams):
             loss = lossFn(output, testExpectedData)
             totalTestLoss = loss.item()
         print(f"epoch: {epoch + 1}, trainLoss: {totalTrainLoss:.10f}, testLoss: {totalTestLoss:.10f}")
+
+        if totalTrainLoss <= bestError:
+            bestError = totalTrainLoss
+        else:
+            errorCounter += 1
+
+        if errorCounter == maxErrors:
+            print(f"Zakończono trenowanie sieci z uwagi na osiągnięcie wartości maksymalnej {trainingParams['max_errors']} błędów podczas procesu nauki.")
+            print(f"Ostatni wynik spełniający warunek: epoch: {epoch + 1}, trainLoss: {totalTrainLoss:.10f}, testLoss: {totalTestLoss:.10f}")
+            break
