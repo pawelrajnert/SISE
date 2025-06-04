@@ -1,7 +1,7 @@
 {
-  "hiddenSize": 30,
-  "activation": "sigmoid",
-  "scalerType": "maxabs",
-  "lr": 0.001,
-  "max_epochs": 100
+  "hiddenSize": 10,
+  "activation": "tanh",
+  "scalerType": "minmax",
+  "lr": 0.0001,
+  "max_epochs": 2000
 }

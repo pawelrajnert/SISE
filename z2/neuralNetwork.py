@@ -37,15 +37,17 @@ def trainNetwork(net, statData, dynData, trainingParams):
     for epoch in range(maxEpochs):
         # trenowanie sieci na zbiorze treningowym
         net.train()
-        #optimizer.zero_grad()
+        optimizer.zero_grad()
         output = net(trainInputData)
         loss = lossFn(output, trainExpectedData)
         loss.backward()
         optimizer.step()
-        totalTrainLoss = loss.item()
-        # testowanie sieci na zbiorze testowym
         net.eval()
+        # wyliczenie błędu średniokwadratowego na zbiorze treningowym i testowym
         with torch.no_grad():
+            output = net(trainInputData)
+            loss = lossFn(output, trainExpectedData)
+            totalTrainLoss = loss.item()
             output = net(testInputData)
             loss = lossFn(output, testExpectedData)
             totalTestLoss = loss.item()
