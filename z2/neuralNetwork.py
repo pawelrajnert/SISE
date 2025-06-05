@@ -1,6 +1,6 @@
 import torch
 from scaleData import numpyToTorch
-
+from dataIO import saveData
 
 class NeuralNetwork(torch.nn.Module):
 
@@ -24,47 +24,50 @@ class NeuralNetwork(torch.nn.Module):
         x = self.hiddenToOutput(x)
         return x
 
+    def trainNetwork(self, statData, dynData, trainingParams):
+        # Podział danych na dane treningowe i testowe oraz dane wejściowe i wyjściowe
+        trainInputData = numpyToTorch(statData, "01")
+        trainExpectedData = numpyToTorch(statData, "23")
+        testInputData = numpyToTorch(dynData, "01")
+        testExpectedData = numpyToTorch(dynData, "23")
 
-def trainNetwork(net, statData, dynData, trainingParams):
-    # Podział danych na dane treningowe i testowe oraz dane wejściowe i wyjściowe
-    trainInputData = numpyToTorch(statData, "01")
-    trainExpectedData = numpyToTorch(statData, "23")
-    testInputData = numpyToTorch(dynData, "01")
-    testExpectedData = numpyToTorch(dynData, "23")
+        lossFn = torch.nn.MSELoss()
+        optimizer = torch.optim.Adam(self.parameters(), lr=trainingParams["lr"])
+        maxEpochs = trainingParams["max_epochs"]
+        maxErrors = trainingParams["max_errors"]
+        errorCounter = 0
+        bestError = float("inf")
+        testMSEValues = []
+        trainMSEValues = []
+        for epoch in range(maxEpochs):
+            # trenowanie sieci na zbiorze treningowym
+            self.train()
+            optimizer.zero_grad()
+            output = self(trainInputData)
+            loss = lossFn(output, trainExpectedData)
+            loss.backward()
+            optimizer.step()
+            self.eval()
+            # wyliczenie błędu średniokwadratowego na zbiorze treningowym i testowym
+            with torch.no_grad():
+                trainOutput = self(trainInputData)
+                loss = lossFn(trainOutput, trainExpectedData)
+                totalTrainLoss = loss.item()
+                testOutput = self(testInputData)
+                loss = lossFn(testOutput, testExpectedData)
+                totalTestLoss = loss.item()
+            print(f"epoch: {epoch + 1}, trainLoss: {totalTrainLoss:.10f}, testLoss: {totalTestLoss:.10f}")
 
-    lossFn = torch.nn.MSELoss()
-    optimizer = torch.optim.Adam(net.parameters(), lr=trainingParams["lr"])
-    maxEpochs = trainingParams["max_epochs"]
-    maxErrors = trainingParams["max_errors"]
-    errorCounter = 0
-    bestError = float("inf")
+            if totalTestLoss <= bestError:
+                bestError = totalTestLoss
+            else:
+                errorCounter += 1
 
-    for epoch in range(maxEpochs):
-        # trenowanie sieci na zbiorze treningowym
-        net.train()
-        optimizer.zero_grad()
-        output = net(trainInputData)
-        loss = lossFn(output, trainExpectedData)
-        loss.backward()
-        optimizer.step()
-        net.eval()
-        # wyliczenie błędu średniokwadratowego na zbiorze treningowym i testowym
-        with torch.no_grad():
-            trainOutput = net(trainInputData)
-            loss = lossFn(trainOutput, trainExpectedData)
-            totalTrainLoss = loss.item()
-            testOutput = net(testInputData)
-            loss = lossFn(testOutput, testExpectedData)
-            totalTestLoss = loss.item()
-        print(f"epoch: {epoch + 1}, trainLoss: {totalTrainLoss:.10f}, testLoss: {totalTestLoss:.10f}")
-
-        if totalTestLoss <= bestError:
-            bestError = totalTestLoss
-        else:
-            errorCounter += 1
-
-        if errorCounter == maxErrors:
-            print(f"Zakończono trenowanie sieci z uwagi na osiągnięcie wartości maksymalnej {trainingParams['max_errors']} błędów podczas procesu nauki.")
-            print(f"Ostatni wynik spełniający warunek: epoch: {epoch + 1}, trainLoss: {totalTrainLoss:.10f}, testLoss: {totalTestLoss:.10f}")
-            break
-    return trainOutput.numpy(), testOutput.numpy()
+            if errorCounter == maxErrors:
+                print(f"Zakończono trenowanie sieci z uwagi na osiągnięcie wartości maksymalnej {trainingParams['max_errors']} błędów podczas procesu nauki.")
+                print(f"Ostatni wynik spełniający warunek: epoch: {epoch + 1}, trainLoss: {totalTrainLoss:.10f}, testLoss: {totalTestLoss:.10f}")
+                break
+            testMSEValues.append(totalTestLoss)
+            trainMSEValues.append(totalTrainLoss)
+        saveData(testMSEValues, trainMSEValues)
+        return trainOutput.numpy(), testOutput.numpy()
