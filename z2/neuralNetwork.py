@@ -24,7 +24,7 @@ class NeuralNetwork(torch.nn.Module):
         x = self.hiddenToOutput(x)
         return x
 
-    def trainNetwork(self, statData, dynData, trainingParams):
+    def trainNetwork(self, statData, dynData, trainingParams, scaler):
         # Podział danych na dane treningowe i testowe oraz dane wejściowe i wyjściowe
         trainInputData = numpyToTorch(statData, "01")
         trainExpectedData = numpyToTorch(statData, "23")
@@ -37,6 +37,7 @@ class NeuralNetwork(torch.nn.Module):
         maxErrors = trainingParams["max_errors"]
         errorCounter = 0
         bestError = float("inf")
+        bestTestOutput = None
         testMSEValues = []
         trainMSEValues = []
         for epoch in range(maxEpochs):
@@ -44,22 +45,23 @@ class NeuralNetwork(torch.nn.Module):
             self.train()
             optimizer.zero_grad()
             output = self(trainInputData)
-            loss = lossFn(output, trainExpectedData)
-            loss.backward()
+            epochLoss = lossFn(output, trainExpectedData)
+            epochLoss.backward()
             optimizer.step()
             self.eval()
             # wyliczenie błędu średniokwadratowego na zbiorze treningowym i testowym
             with torch.no_grad():
                 trainOutput = self(trainInputData)
-                loss = lossFn(trainOutput, trainExpectedData)
-                totalTrainLoss = loss.item()
+                trainLoss = lossFn(trainOutput, trainExpectedData)
+                totalTrainLoss = trainLoss.item()
                 testOutput = self(testInputData)
-                loss = lossFn(testOutput, testExpectedData)
-                totalTestLoss = loss.item()
+                testLoss = lossFn(testOutput, testExpectedData)
+                totalTestLoss = testLoss.item()
             print(f"epoch: {epoch + 1}, trainLoss: {totalTrainLoss:.10f}, testLoss: {totalTestLoss:.10f}")
 
             if totalTestLoss <= bestError:
                 bestError = totalTestLoss
+                bestTestOutput = testOutput
             else:
                 errorCounter += 1
 
@@ -69,5 +71,5 @@ class NeuralNetwork(torch.nn.Module):
                 break
             testMSEValues.append(totalTestLoss)
             trainMSEValues.append(totalTrainLoss)
-        saveData(testMSEValues, trainMSEValues)
-        return trainOutput.numpy(), testOutput.numpy()
+        saveData(testMSEValues, trainMSEValues, bestTestOutput, scaler)
+

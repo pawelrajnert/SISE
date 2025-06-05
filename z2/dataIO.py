@@ -1,7 +1,10 @@
 import os
+from re import fullmatch
+
 import pandas as pd
 import numpy as np
 import json
+from scaleData import reverseScale
 
 # Zgodnie z 2 akapitem opisu części badawczej, tworzymy dwa zbiory, zawierające 4 kolumny:
 # - zbiór do uczenia sieci (dane z plików z katalogów "stat")
@@ -17,10 +20,17 @@ def readData():
     return np.vstack(statData), np.vstack(dynData)
 
 
-def saveData(testMSEValues, trainMSEValues):
+def saveData(testMSEValues, trainMSEValues, bestOutput, scaler):
     config = json.load(open('config.json'))
     os.makedirs("wyniki", exist_ok=True)
     data = pd.DataFrame(testMSEValues)
     data.to_csv(f"wyniki/{config["activation"]}-{config["MSEtestFile"]}", index=False, header=False)
     data = pd.DataFrame(trainMSEValues)
     data.to_csv(f"wyniki/{config["activation"]}-{config["MSEtrainFile"]}", index=False, header=False)
+    fillDataWithZeros = np.zeros((bestOutput.shape[0], 4))
+    fillDataWithZeros[:, 2:] = bestOutput
+    print(fillDataWithZeros)
+    scaledData = reverseScale(fillDataWithZeros, scaler)
+    print(np.max(scaledData[:,1:]))
+    data = pd.DataFrame(scaledData[:, 2:])
+    data.to_csv(f"wyniki/{config["activation"]}-{config["outputFile"]}", index=False, header=False)

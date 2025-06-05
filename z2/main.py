@@ -27,4 +27,4 @@ scaledStatData, scaledDynData, usedScaler = scaleData(statData, dynData, scalerT
 
 net = NeuralNetwork(hiddenSize, activation)
 trainingParams = {'lr': lr, 'max_epochs': max_epochs, 'max_errors': max_errors}
-trainResult, testResult = net.trainNetwork(scaledStatData, scaledDynData, trainingParams)
+net.trainNetwork(scaledStatData, scaledDynData, trainingParams, usedScaler)
