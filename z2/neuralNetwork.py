@@ -72,4 +72,6 @@ class NeuralNetwork(torch.nn.Module):
             testMSEValues.append(totalTestLoss)
             trainMSEValues.append(totalTrainLoss)
         saveData(testMSEValues, trainMSEValues, bestTestOutput, scaler)
+        from plot import drawPlots
+        drawPlots()
 
