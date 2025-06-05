@@ -50,16 +50,16 @@ def trainNetwork(net, statData, dynData, trainingParams):
         net.eval()
         # wyliczenie błędu średniokwadratowego na zbiorze treningowym i testowym
         with torch.no_grad():
-            output = net(trainInputData)
-            loss = lossFn(output, trainExpectedData)
+            trainOutput = net(trainInputData)
+            loss = lossFn(trainOutput, trainExpectedData)
             totalTrainLoss = loss.item()
-            output = net(testInputData)
-            loss = lossFn(output, testExpectedData)
+            testOutput = net(testInputData)
+            loss = lossFn(testOutput, testExpectedData)
             totalTestLoss = loss.item()
         print(f"epoch: {epoch + 1}, trainLoss: {totalTrainLoss:.10f}, testLoss: {totalTestLoss:.10f}")
 
-        if totalTrainLoss <= bestError:
-            bestError = totalTrainLoss
+        if totalTestLoss <= bestError:
+            bestError = totalTestLoss
         else:
             errorCounter += 1
 
@@ -67,3 +67,4 @@ def trainNetwork(net, statData, dynData, trainingParams):
             print(f"Zakończono trenowanie sieci z uwagi na osiągnięcie wartości maksymalnej {trainingParams['max_errors']} błędów podczas procesu nauki.")
             print(f"Ostatni wynik spełniający warunek: epoch: {epoch + 1}, trainLoss: {totalTrainLoss:.10f}, testLoss: {totalTestLoss:.10f}")
             break
+    return trainOutput.numpy(), testOutput.numpy()
