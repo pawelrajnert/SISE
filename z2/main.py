@@ -2,7 +2,6 @@ from dataIO import readData
 from scaleData import scaleData
 import json
 from neuralNetwork import *
-import os
 # załadowanie configu
 try:
     config = json.load(open('config.json'))
@@ -27,6 +26,5 @@ statData, dynData = readData()
 scaledStatData, scaledDynData, usedScaler = scaleData(statData, dynData, scalerType)
 
 net = NeuralNetwork(hiddenSize, activation)
-trainingParams = {'lr': lr, 'max_epochs': max_epochs, 'max_errors': max_errors, 'MSEtestFile': MSEtestFile,
-                  'MSEtrainFile': MSEtrainFile, 'outputFile': outputFile}
+trainingParams = {'lr': lr, 'max_epochs': max_epochs, 'max_errors': max_errors}
 trainResult, testResult = net.trainNetwork(scaledStatData, scaledDynData, trainingParams)
