@@ -19,17 +19,15 @@ def readData():
 
 
 def saveData(testMSEValues, trainMSEValues, bestOutput, scaler):
-
     config = json.load(open('config.json'))
     os.makedirs("wyniki", exist_ok=True)
-    if config["saveToFile"] == "YES":
-        data = pd.DataFrame(testMSEValues)
-        data.to_csv(f"wyniki/{config["activation"]}-{config["MSEtestFile"]}", index=False, header=False)
-        data = pd.DataFrame(trainMSEValues)
-        data.to_csv(f"wyniki/{config["activation"]}-{config["MSEtrainFile"]}", index=False, header=False)
-        fillDataWithZeros = np.zeros((bestOutput.shape[0], 4))
-        fillDataWithZeros[:, 2:] = bestOutput
-        scaledData = reverseScale(fillDataWithZeros, scaler)
-        data = pd.DataFrame(scaledData[:, 2:])
-        data.to_csv(f"wyniki/{config["activation"]}-{config["outputFile"]}", index=False, header=False)
-        print("Zapisano dane do plików w katalogu wyniki")
+    data = pd.DataFrame(testMSEValues)
+    data.to_csv(f"wyniki/{config["activation"]}-{config["MSEtestFile"]}", index=False, header=False)
+    data = pd.DataFrame(trainMSEValues)
+    data.to_csv(f"wyniki/{config["activation"]}-{config["MSEtrainFile"]}", index=False, header=False)
+    fillDataWithZeros = np.zeros((bestOutput.shape[0], 4))
+    fillDataWithZeros[:, 2:] = bestOutput
+    scaledData = reverseScale(fillDataWithZeros, scaler)
+    data = pd.DataFrame(scaledData[:, 2:])
+    data.to_csv(f"wyniki/{config["activation"]}-{config["outputFile"]}", index=False, header=False)
+    print("Zapisano dane do plików w katalogu wyniki")

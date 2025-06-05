@@ -1,12 +1,11 @@
 {
-  "hiddenSize": 8,
-  "activation": "tanh",
-  "scalerType": "maxabs",
-  "lr": 0.001,
+  "hiddenSize": 12,
+  "activation": "sigmoid",
+  "scalerType": "standard",
+  "lr": 0.025,
   "max_epochs": 1000,
   "max_errors": 1000,
   "MSEtestFile": "msetest.csv",
   "MSEtrainFile": "msetrain.csv",
-  "outputFile": "results.csv",
-  "saveToFile": "YES"
+  "outputFile": "results.csv"
 }

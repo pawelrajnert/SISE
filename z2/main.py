@@ -24,4 +24,5 @@ scaledStatData, scaledDynData, usedScaler = scaleData(statData, dynData, scalerT
 
 net = NeuralNetwork(hiddenSize, activation)
 trainingParams = {'lr': lr, 'max_epochs': max_epochs, 'max_errors': max_errors}
+print("Rozpoczynam trenowanie sieci...")
 net.trainNetwork(scaledStatData, scaledDynData, trainingParams, usedScaler)

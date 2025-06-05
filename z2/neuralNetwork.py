@@ -57,7 +57,6 @@ class NeuralNetwork(torch.nn.Module):
                 testOutput = self(testInputData)
                 testLoss = lossFn(testOutput, testExpectedData)
                 totalTestLoss = testLoss.item()
-            print(f"epoch: {epoch + 1}, trainLoss: {totalTrainLoss:.10f}, testLoss: {totalTestLoss:.10f}")
 
             if totalTestLoss <= bestError:
                 bestError = totalTestLoss
@@ -72,6 +71,3 @@ class NeuralNetwork(torch.nn.Module):
             testMSEValues.append(totalTestLoss)
             trainMSEValues.append(totalTrainLoss)
         saveData(testMSEValues, trainMSEValues, bestTestOutput, scaler)
-        from plot import drawPlots
-        drawPlots()
-
