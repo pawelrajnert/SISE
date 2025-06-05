@@ -1,9 +1,9 @@
 {
   "hiddenSize": 10,
-  "activation": "relu",
+  "activation": "tanh",
   "scalerType": "maxabs",
   "lr": 0.005,
-  "max_epochs": 20,
+  "max_epochs": 500,
   "max_errors": 1000,
   "MSEtestFile": "msetest.csv",
   "MSEtrainFile": "msetrain.csv",

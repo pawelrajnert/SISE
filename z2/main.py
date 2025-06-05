@@ -11,9 +11,6 @@ try:
     lr = config['lr']
     max_epochs = config['max_epochs']
     max_errors = config['max_errors']
-    MSEtestFile = config['MSEtestFile']
-    MSEtrainFile = config['MSEtrainFile']
-    outputFile = config['outputFile']
 
 except FileNotFoundError:
     raise ValueError("Nie można załadować pliku z configiem; upewnij się, że plik config.json znajduje się w katalogu.")
