@@ -60,13 +60,13 @@ x2 = dynData[:, 2]
 y2 = dynData[:, 3]
 
 plt.figure(figsize=(14, 10))
-plt.scatter(x1, y1, color='red', label='Zmierzone', alpha=0.4, s=15)
-plt.scatter(x, y, color='blue', label='Skorygowane', alpha=0.7, s=15)
-plt.scatter(x2, y2, color='green', label='Rzeczywiste', alpha=1.0, s=25)
+plt.scatter(x1, y1, color='C0', label='Zmierzone', alpha=0.4, s=15)
+plt.scatter(x, y, color='green', label='Skorygowane', alpha=0.7, s=15)
+plt.scatter(x2, y2, color='black', label='Rzeczywiste', alpha=1.0, s=25)
 
 plt.xlabel("X [mm]")
 plt.ylabel("Y [mm]")
-plt.title("Wyniki pomiarów dynamicznych: rzeczywiste vs skorygowane vs zmierzone")
+plt.title("Skorygowane wartości pomiarów dynamicznych")
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.show()
